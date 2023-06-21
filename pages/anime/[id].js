@@ -29,9 +29,10 @@ function AnimeDetailPage() {
   return (
     <div>
       {anime ? (
-        <div>
+        <div className="ml-4">
           <h1>{anime.title}</h1>
           <img src={anime.image} alt={anime.title} />
+          <br />
           <p>Release Date: {anime.releaseDate || "Unknown"}</p>
           <p>{anime.type}</p>
           <p>{anime.status}</p>
@@ -48,11 +49,16 @@ function AnimeDetailPage() {
           <br />
           <p>Total Episodes: {anime.totalEpisodes}</p>
           <br />
-          <ul>
+          <ul className="flex flex-wrap">
             {anime.episodes.map((episode) => (
-              <li key={episode.id}>
+              <li
+                key={episode.id}
+                className="w-full sm:w-1/6 md:w-1/7 lg:w-1/8 xl:w-1/9"
+              >
                 <Link href={`/watch/${episode.id}`}>
-                  Watch Episode {episode.number}
+                  <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg ml-[10px]  mr-[10px]   mb-[10px] group items-center">
+                    Watch Episode {episode.number}
+                  </button>
                 </Link>
               </li>
             ))}
