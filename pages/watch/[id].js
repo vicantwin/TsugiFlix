@@ -7,8 +7,8 @@ import "video.js/dist/video-js.css";
 function WatchPage() {
   const router = useRouter();
   const { id } = router.query;
-  console.log(`https://api.consumet.org/anime/gogoanime/watch/${id}`);
   const [data, setData] = useState(null);
+  const [animeData, setAnimeData] = useState(null);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -18,6 +18,24 @@ function WatchPage() {
           `https://api.consumet.org/anime/gogoanime/watch/${id}`
         );
         setData(response.data);
+        function splitString(string, delimiter) {
+          const index = string.indexOf(delimiter);
+          if (index !== -1) {
+            return string.slice(0, index);
+          }
+          return string;
+        }
+
+        const string = id;
+        const delimiter = "-episode-";
+        const animeID = splitString(string, delimiter);
+
+        console.log(animeID);
+        const animeResponse = await axios.get(
+          `https://api.consumet.org/anime/gogoanime/info/${animeID}`
+        );
+        setAnimeData(animeResponse.data);
+        console.log(animeData.episodes);
       } catch (err) {
         console.error(err);
       }
@@ -45,10 +63,11 @@ function WatchPage() {
 
   return (
     <div>
-      {data ? (
+      {data && animeData ? (
         <div>
-          <h1>API Response</h1>
-          {/*<p>Referer: {data.headers.Referer}</p>
+          <div>
+            <h1 className="justify-center">{animeData.title}</h1>
+            {/*<p>Referer: {data.headers.Referer}</p>
           <p>watchsb: {data.headers.watchsb || "null"}</p>
           <p>User-Agent: {data.headers["User-Agent"] || "null"}</p>
           <h2>Sources</h2>
@@ -61,8 +80,15 @@ function WatchPage() {
               </li>
             ))}
             </ul> */}
-          {console.log(data.sources[0], data.headers)}
-          <video controls ref={videoRef} className="video-js" />
+            {console.log(data.sources[0], data.headers)}
+            <div className="m-auto p-20">
+              <video controls ref={videoRef} className="video-js vjs-16-9" />
+            </div>
+          </div>
+          <div className="justify-center flex flex-col">
+            <h3>Type: {animeData.subOrDub},</h3>
+            <h3> Status: {animeData.status}</h3>
+          </div>
         </div>
       ) : (
         <p>Loading...</p>
