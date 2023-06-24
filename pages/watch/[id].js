@@ -46,11 +46,12 @@ function WatchPage() {
 
   useEffect(() => {
     if (videoRef.current) {
+      console.log(data.sources);
       videojs(videoRef.current, {
         sources: [
           {
             src: `https://m3u8.eltik.net/m3u8-proxy?url=${encodeURIComponent(
-              data.sources[0].url
+              data.sources[data.sources.length - 3].url
             )}%23.mp4&headers=${encodeURIComponent(
               JSON.stringify(data.headers)
             )}`,
@@ -64,10 +65,8 @@ function WatchPage() {
   return (
     <div>
       {data && animeData ? (
-        <div>
-          <div>
-            <h1 className="justify-center">{animeData.title}</h1>
-            {/*<p>Referer: {data.headers.Referer}</p>
+        <div className="index-info">
+          {/*<p>Referer: {data.headers.Referer}</p>
           <p>watchsb: {data.headers.watchsb || "null"}</p>
           <p>User-Agent: {data.headers["User-Agent"] || "null"}</p>
           <h2>Sources</h2>
@@ -80,14 +79,14 @@ function WatchPage() {
               </li>
             ))}
             </ul> */}
-            {console.log(data.sources[0], data.headers)}
-            <div className="m-auto p-20">
-              <video controls ref={videoRef} className="video-js vjs-16-9" />
+          {console.log(data.sources[data.sources.length - 3], data.headers)}
+          <div className="m-auto p-20">
+            <h1 className="font-bold text-3xl">{animeData.title}</h1>
+            <video controls ref={videoRef} className="video-js vjs-16-9" />
+            <div className="justify-center flex flex-col">
+              <h3>Type: {animeData.subOrDub},</h3>
+              <h3> Status: {animeData.status}</h3>
             </div>
-          </div>
-          <div className="justify-center flex flex-col">
-            <h3>Type: {animeData.subOrDub},</h3>
-            <h3> Status: {animeData.status}</h3>
           </div>
         </div>
       ) : (

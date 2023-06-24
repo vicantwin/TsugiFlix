@@ -27,10 +27,10 @@ function AnimeDetailPage() {
   }, [id]);
 
   return (
-    <div>
+    <div className="index-info">
       {anime ? (
-        <div className="ml-4">
-          <h1>{anime.title}</h1>
+        <div className="ml-5">
+          <h1 className="text-xl font-bold">{anime.title}</h1>
           <img src={anime.image} alt={anime.title} />
           <br />
           <p>Release Date: {anime.releaseDate || "Unknown"}</p>
