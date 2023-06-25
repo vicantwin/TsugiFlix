@@ -10,6 +10,7 @@ function WatchPage() {
   const [data, setData] = useState(null);
   const [animeData, setAnimeData] = useState(null);
   const videoRef = useRef(null);
+  const [filteredEp, setFilteredEp] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -34,8 +35,13 @@ function WatchPage() {
         const animeResponse = await axios.get(
           `https://api.consumet.org/anime/gogoanime/info/${animeID}`
         );
+        console.log(animeResponse.data);
         setAnimeData(animeResponse.data);
-        console.log(animeData.episodes);
+        setFilteredEp(
+          animeResponse.data.episodes.find((episode) => episode.id === id)
+            .number
+        );
+        console.log(filteredEp);
       } catch (err) {
         console.error(err);
       }
@@ -46,7 +52,9 @@ function WatchPage() {
 
   useEffect(() => {
     if (videoRef.current) {
-      console.log(data.sources);
+      {
+        /* console.log(data.sources); */
+      }
       videojs(videoRef.current, {
         sources: [
           {
@@ -81,8 +89,10 @@ function WatchPage() {
             </ul> */}
           {console.log(data.sources[data.sources.length - 3], data.headers)}
           <div className="m-auto p-20">
-            <h1 className="font-bold text-3xl">{animeData.title}</h1>
-            <video controls ref={videoRef} className="video-js vjs-16-9" />
+            <h1 className="font-bold text-3xl">
+              {animeData.title} - Episode {filteredEp}
+            </h1>
+            <video controls ref={videoRef} className="video-js" />
             <div className="justify-center flex flex-col">
               <h3>Type: {animeData.subOrDub},</h3>
               <h3> Status: {animeData.status}</h3>

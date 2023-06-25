@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const SearchForm = ({ searchQuery, setSearchQuery }) => {
   const handleChange = (event) => {
@@ -15,12 +16,12 @@ const SearchForm = ({ searchQuery, setSearchQuery }) => {
         placeholder="Search for Anime..."
         className="placeholder:italic relative placeholder:text-slate-200 block bg-slate-600 w-[20vw] border border-slate-300 rounded-md py-3 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm m-[77vw] text-white mt-5 mb-5"
       />
-      <a
+      <Link
         className="absolute top-[35px] text-2xl font-bold pl-[50px] py-1 px-1"
         href="/"
       >
         TsugiFlix
-      </a>
+      </Link>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -83,7 +84,9 @@ const AnimeList = ({ data }) => {
 
 const AnimeSearch = () => {
   const [data, setData] = useState();
+
   const [searchQuery, setSearchQuery] = useState("");
+  const url = `https://api.consumet.org/anime/gogoanime/${searchQuery}`;
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -107,10 +110,7 @@ const AnimeSearch = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        `https://api.consumet.org/anime/gogoanime/${searchQuery}`,
-        { params: { page: 1 } }
-      );
+      const response = await axios.get(url, { params: { page: 1 } });
       setData(response.data);
       setSubmitted(false);
       setIsLoading(false);
@@ -141,7 +141,7 @@ const AnimeSearch = () => {
         <AnimeList data={data} />
       ) : (
         <div className="flex justify-center mt-8">
-          <h3 className="text-white">Vi's Website</h3>
+          <h3 className="text-white">Vi&apos;s Website</h3>
         </div>
       )}
     </div>
